@@ -2,39 +2,33 @@ import argparse
 from flask import Flask
 import os
 import logging
+from vcgencmd import Vcgencmd
 
-import app_config
+#import app_config
 
 #HDMI steuern
 #https://pypi.org/project/vcgencmd/#:~:text='vcgencmd'%20is%20a%20command%20line,a%20binding%20to%20that%20tool.
 #vcgencmd display_power 0
 
 app = Flask(__name__)
-
-hdmiStauts = 0
-
-@app.route('/')
-def hello_world():
-    return 'Hello, World!'
+hdmi = Vcgencmd()
 
 
 @app.route('/api/hdmi/on')
 def hdmiOn():
-    hdmiStatus = 1
-    os.system("vcgencmd display_power 1")
-    return 'HDMI On'
+    #os.system("vcgencmd display_power 1")
+    hdmi.display_power_on(2)
+    return "on"
 
 @app.route('/api/hdmi/off')
 def hdmiOff():
-    hdmiStatus = 0
-    os.system("vcgencmd display_power 0")
-    return 'HDMI Off'
+    #os.system("vcgencmd display_power 0")
+    hdmi.display_power_off(2)
+    return "off"
 
 @app.route('/api/hdmi/status')
 def hdmiStatus():
-    zahl = str(hdmiStatus)
-    tmp = "HDMI Status" + hdmiStatus
-    return tmp
+    return hdmi.display_power_state(2)
 
 
 def parse_args():
@@ -46,8 +40,7 @@ def parse_args():
                         dest='address', help='IP address to host on.', type=str, default='0.0.0.0')
     parser.add_argument('-p', '--port', required=False,
                         dest='port', help='Port to host on.', type=int, default=2202)
-    parser.add_argument(
-        '-d', '--debug',
+    parser.add_argument('-d', '--debug',
         help="Print lots of debugging statements",
         action="store_const", dest="loglevel", const=logging.DEBUG,
         default=logging.WARNING,
@@ -75,5 +68,7 @@ if __name__ == "__main__":
     # main process
     print_info(f'hosting on http://{args.address}:{args.port}')
     app.run(host=args.address, port=args.port)
+
+
 
 
