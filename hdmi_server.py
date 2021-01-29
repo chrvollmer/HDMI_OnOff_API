@@ -2,13 +2,14 @@ import argparse
 from flask import Flask
 import os
 import logging
-app = Flask(__name__)
 
+import app_config
 
 #HDMI steuern
 #https://pypi.org/project/vcgencmd/#:~:text='vcgencmd'%20is%20a%20command%20line,a%20binding%20to%20that%20tool.
 #vcgencmd display_power 0
 
+app = Flask(__name__)
 
 hdmiStauts = 0
 
