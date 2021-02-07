@@ -1,5 +1,5 @@
 import argparse
-from flask import Flask
+from flask import Flask, jsonify
 import os
 import logging
 from vcgencmd import Vcgencmd
@@ -30,6 +30,10 @@ def hdmiOff():
 def hdmiStatus():
     return hdmi.display_power_state(2)
 
+@app.route('/api/health', methods=['GET'])
+def get_health():
+    result = {'status': 'Ok'}
+    return jsonify(result)
 
 def parse_args():
 
