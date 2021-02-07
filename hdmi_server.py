@@ -70,7 +70,7 @@ if __name__ == "__main__":
         filename=args.logfile, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=args.loglevel)
     
     # main process
-    print_info(f'hosting on http://{args.address}:{args.port}')
+    print_info('hosting on http://{args.address}:{args.port}')
     app.run(host=args.address, port=args.port)
 
 
